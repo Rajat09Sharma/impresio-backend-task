@@ -1,10 +1,13 @@
 const { model } = require("mongoose");
 const Partner = require("../model/partner");
+const Inquiry = require("../model/inquiry");
 
 
 // create Partner
 async function createPartnerHandler(req, res) {
     const { name, location, price, tags, portfolio, categories, aadharNumber } = req.body;
+
+    const { id } = req.user;
 
 
     try {
@@ -13,7 +16,7 @@ async function createPartnerHandler(req, res) {
             res.status(400).json({ message: "All fields are required!" });
         }
 
-        const partner = await Partner.create({ ...req.body });
+        const partner = await Partner.create({ ...req.body, userId: id });
 
         res.status(201).json({ message: "Partner created successfully!", partner });
 
@@ -44,7 +47,6 @@ async function getAllPartnerHandler(req, res) {
 
 
 //add Portfolio
-
 async function addPortfolioHandler(req, res) {
 
     const { id } = req.params;
@@ -141,17 +143,7 @@ async function deletePortfolioHandler(req, res) {
 
 }
 
-//fetch matched inquiries or lead fetching
-async function getLeadsHandler(req, res) {
 
-    try {
-
-    } catch (error) {
-        console.log("Delete partner portfolio handler error: ", error);
-        res.status(500).json({ message: "Failed to delete portfolio." })
-    }
-
-}
 
 
 
@@ -161,4 +153,6 @@ module.exports = {
     addPortfolioHandler,
     editPortfolioHandler,
     deletePortfolioHandler,
+    getLeadsHandler,
+    updateInquiryStatusHandler
 }

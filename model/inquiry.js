@@ -5,7 +5,7 @@ const inquirySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    clientId: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
@@ -35,7 +35,7 @@ const inquirySchema = new mongoose.Schema({
     },
     closedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Partner'
+        ref: 'User'
     }
 }, { timestamps: true });
 

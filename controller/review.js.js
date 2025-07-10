@@ -1,0 +1,102 @@
+const Review = require("../model/Review");
+
+// create review
+async function createReviewHandler(req, res) {
+    const { rating, comment } = req.body;
+    const { id } = req.user.id
+    const partnerId = req.params.id
+
+    try {
+        if (!rating) {
+            res.status(400).json({ message: "Rating is Required!" });
+        }
+
+        const review = await Review.create({ ...req.body, userId: id, partnerId });
+        res.status(201).json({ message: "Review created successfully!", review })
+
+
+    } catch (error) {
+        console.error("Error fetching KPIs:", error);
+        res.status(500).json({ message: "Failed to fetch KPIs data." });
+    }
+}
+
+//get reviews
+async function getReviewsHandler(req, res) {
+    try {
+        const reviews = await Review.find();
+        if (reviews) {
+            res.status(201).json({ message: "Fetch Reviews successfully!", reviews })
+        } else {
+            res.status(400).json({ message: "No reviews!" })
+        }
+
+    } catch (error) {
+        console.error("get Reviews Handler Error:", error);
+        res.status(500).json({ message: "Failed to fetch reviews." });
+    }
+}
+
+//get review by ID
+async function getReviewByIdHandler(req, res) {
+    const partnerId = req.params.id;
+    try {
+        const review = await Review.findOne({ partnerId });
+        if (review) {
+            res.status(201).json({ message: "Fetch Reviews successfully!", review })
+        } else {
+            res.status(400).json({ message: "No reviews!" })
+        }
+
+    } catch (error) {
+        console.error("get Review ById Handler Error:", error);
+        res.status(500).json({ message: "Failed to fetch reviews." });
+
+
+    }
+}
+
+
+//update review
+async function updateReviewHandler(req, res) {
+    const { rating, comment } = req.body;
+    const reviewId = req.params.id
+
+    try {
+        if (!rating) {
+            res.status(400).json({ message: "Rating is Required!" });
+        }
+
+        const review = await Review.findOneAndUpdate({ _id: reviewId }, { ...req.body })
+        res.status(201).json({ message: "Review updated successfully!", review })
+
+
+    } catch (error) {
+        console.error("update Review Handler Error:", error);
+        res.status(500).json({ message: "Failed to update review." });
+    }
+}
+
+//delete review
+async function deleteReviewHandler(req, res) {
+    const reviewId = req.params.id
+
+    try {
+
+        const review = await Review.deleteOne({ _id: reviewId })
+        res.status(201).json({ message: "Review deleted successfully!", review })
+
+
+    } catch (error) {
+        console.error("delete Review Handler Error:", error);
+        res.status(500).json({ message: "Failed to delete review." });
+    }
+}
+
+module.exports = {
+    createReviewHandler,
+    getReviewsHandler,
+    getReviewByIdHandler,
+    updateReviewHandler,
+    deleteReviewHandler
+}

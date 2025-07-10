@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const authRouter = require("./routes/auth");
 const partnerRouter = require("./routes/partner");
+const inquiryRouter = require("./routes/inquiry");
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(cors());
 
 app.use("/api/auth", authRouter);
 app.use("/api/partner", partnerRouter);
+app.use("/api/inquiry", inquiryRouter);
 
 
 

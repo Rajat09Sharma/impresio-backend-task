@@ -167,7 +167,7 @@ Pixisphere is a backend API for a photography platform that connects clients wit
 
 ### 🔄 Installation
 
-git clone https://github.com/yourusername/pixisphere-backend.git
+git clone https://github.com/Rajat09Sharma/impresio-backend-task/
 cd pixisphere-backend
 npm install
 
@@ -178,8 +178,7 @@ MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_jwt_secret
 
 Run the server:
-
-npm start
+node inde.js
 
 Server runs at http://localhost:3000
 

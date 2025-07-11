@@ -12,17 +12,17 @@ async function createInquiryHandler(req, res) {
     try {
 
         if (!category || !budget || !city || !date) {
-            res.status(400).json({ message: "All fields required!" });
+            return res.status(400).json({ message: "All fields required!" });
         }
 
         const result = await Inquiry.create({ ...req.body, name: name, userId: id });
 
-        res.status(200).json({ message: "Inquiry created successfully.", inquiry: result });
+        return res.status(200).json({ message: "Inquiry created successfully.", inquiry: result });
 
 
     } catch (error) {
         console.log("Create inquiry handler error: ", error);
-        res.status(500).json({ message: "Failed to create inquiry." })
+        return res.status(500).json({ message: "Failed to create inquiry." })
     }
 
 }
@@ -34,7 +34,11 @@ async function getLeadsHandler(req, res) {
     try {
         const partner = await Partner.findOne({ userId: id });
 
-        const { location, price, categories } = partner;
+        const { location, price, categories, status } = partner;
+
+        if (status == "pending") {
+            return res.status(400).json({ message: "only verify partner can see leads!" });
+        }
 
         let matchInquiries = await Inquiry.find({
             budget: { $gte: price },
@@ -44,11 +48,11 @@ async function getLeadsHandler(req, res) {
 
         matchInquiries = matchInquiries.filter(d => d.city.toLowerCase().trim() === location.toLowerCase().trim());
 
-        res.status(200).json({ leads: matchInquiries });
+        return res.status(200).json({ message: "Leads fetch successfully", leads: matchInquiries });
 
     } catch (error) {
         console.error("Get leads handler error:", error);
-        res.status(500).json({ message: "Failed to fetch leads." });
+        return res.status(500).json({ message: "Failed to fetch leads." });
     }
 }
 
@@ -77,14 +81,14 @@ async function updateInquiryStatusHandler(req, res) {
 
         await inquiry.save();
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Inquiry status updated successfully",
             inquiry
         });
 
     } catch (error) {
         console.error("update inquiry status handler error:", error);
-        res.status(500).json({ message: "Failed to update inquiry status." });
+        return res.status(500).json({ message: "Failed to update inquiry status." });
     }
 }
 

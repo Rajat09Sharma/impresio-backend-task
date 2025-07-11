@@ -8,16 +8,16 @@ async function createReviewHandler(req, res) {
 
     try {
         if (!rating) {
-            res.status(400).json({ message: "Rating is Required!" });
+            return res.status(400).json({ message: "Rating is Required!" });
         }
 
         const review = await Review.create({ ...req.body, userId: id, partnerId });
-        res.status(201).json({ message: "Review created successfully!", review })
+        return res.status(201).json({ message: "Review created successfully!", review })
 
 
     } catch (error) {
         console.error("Error fetching KPIs:", error);
-        res.status(500).json({ message: "Failed to fetch KPIs data." });
+        return res.status(500).json({ message: "Failed to fetch KPIs data." });
     }
 }
 
@@ -26,14 +26,14 @@ async function getReviewsHandler(req, res) {
     try {
         const reviews = await Review.find();
         if (reviews) {
-            res.status(201).json({ message: "Fetch Reviews successfully!", reviews })
+            return res.status(201).json({ message: "Fetch Reviews successfully!", reviews })
         } else {
-            res.status(400).json({ message: "No reviews!" })
+            return res.status(400).json({ message: "No reviews!" })
         }
 
     } catch (error) {
         console.error("get Reviews Handler Error:", error);
-        res.status(500).json({ message: "Failed to fetch reviews." });
+        return res.status(500).json({ message: "Failed to fetch reviews." });
     }
 }
 
@@ -43,14 +43,14 @@ async function getReviewByIdHandler(req, res) {
     try {
         const review = await Review.findOne({ partnerId });
         if (review) {
-            res.status(201).json({ message: "Fetch Reviews successfully!", review })
+            return res.status(201).json({ message: "Fetch Reviews successfully!", review })
         } else {
-            res.status(400).json({ message: "No reviews!" })
+            return res.status(400).json({ message: "No reviews!" })
         }
 
     } catch (error) {
         console.error("get Review ById Handler Error:", error);
-        res.status(500).json({ message: "Failed to fetch reviews." });
+        return res.status(500).json({ message: "Failed to fetch reviews." });
 
 
     }
@@ -64,16 +64,16 @@ async function updateReviewHandler(req, res) {
 
     try {
         if (!rating) {
-            res.status(400).json({ message: "Rating is Required!" });
+            return res.status(400).json({ message: "Rating is Required!" });
         }
 
         const review = await Review.findOneAndUpdate({ _id: reviewId }, { ...req.body })
-        res.status(201).json({ message: "Review updated successfully!", review })
+        return res.status(201).json({ message: "Review updated successfully!", review })
 
 
     } catch (error) {
         console.error("update Review Handler Error:", error);
-        res.status(500).json({ message: "Failed to update review." });
+        return res.status(500).json({ message: "Failed to update review." });
     }
 }
 
@@ -84,12 +84,12 @@ async function deleteReviewHandler(req, res) {
     try {
 
         const review = await Review.deleteOne({ _id: reviewId })
-        res.status(201).json({ message: "Review deleted successfully!", review })
+        return res.status(201).json({ message: "Review deleted successfully!", review })
 
 
     } catch (error) {
         console.error("delete Review Handler Error:", error);
-        res.status(500).json({ message: "Failed to delete review." });
+        return res.status(500).json({ message: "Failed to delete review." });
     }
 }
 

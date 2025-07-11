@@ -9,12 +9,12 @@ async function signUpHandler(req, res) {
 
     try {
         if (!name || !email || !password || !role || !otp) {
-            res.status(400).json({ message: "All fields are required" });
+            return res.status(400).json({ message: "All fields are required" });
         }
 
         const userExist = await User.findOne({ email });
         if (userExist) {
-            res.status(400).json({ message: "User Already exist." });
+            return res.status(400).json({ message: "User Already exist." });
         }
 
         const result = await generateHashPassword(password);
@@ -26,11 +26,11 @@ async function signUpHandler(req, res) {
 
         const user = await User.create({ name, email, password: hashPassword, role });
 
-        res.status(201).json({ message: "User Signup successfully", user });
+        return res.status(201).json({ message: "User Signup successfully", user });
 
     } catch (error) {
         console.log("signup  handler error:-", error);
-        res.status(500).json({ message: "Failed to signup" });
+        return res.status(500).json({ message: "Failed to signup" });
 
     }
 }
@@ -41,17 +41,17 @@ async function loginHandler(req, res) {
     try {
 
         if (!email || !password || !otp) {
-            res.status(400).json({ message: "All fields are required!" });
+            return res.status(400).json({ message: "All fields are required!" });
         }
 
         const user = await User.findOne({ email });
         if (!user) {
-            res.status(400).json({ message: "Incorrect Email!" });
+            return res.status(400).json({ message: "Incorrect Email!" });
         }
 
         const result = await matchHashPassword(user.password, password);
         if (!result.ok) {
-            res.status(400).json({ message: "Incorrect Password!" });
+            return res.status(400).json({ message: "Incorrect Password!" });
         }
 
         const tokenUser = {
@@ -66,7 +66,7 @@ async function loginHandler(req, res) {
             throw new Error(token.message);
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "User login successfully.",
             token: token.token,
             user: tokenUser
@@ -75,7 +75,7 @@ async function loginHandler(req, res) {
 
     } catch (error) {
         console.log("Login Handler error:", error);
-        res.status(500).json({ message: "Failed to login user" });
+        return res.status(500).json({ message: "Failed to login user" });
 
     }
 }

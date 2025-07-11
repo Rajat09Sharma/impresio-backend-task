@@ -1,6 +1,7 @@
-const User = require("../models/User");
-const Partner = require("../models/Partner");
-const Inquiry = require("../models/Inquiry"); // Assuming you have an Inquiry model
+
+const Inquiry = require("../model/inquiry");
+const Partner = require("../model/partner");
+const User = require("../model/user");
 
 // get kpis
 async function getKpisHandler(req, res) {
@@ -10,7 +11,7 @@ async function getKpisHandler(req, res) {
         const pendingVerifications = await Partner.countDocuments({ status: "pending" });
         const totalInquiries = await Inquiry.countDocuments();
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Total number of clients, partners, pending verfications and inquiries are fetched successfully!",
             totalClients,
             totalPartners,
@@ -19,7 +20,7 @@ async function getKpisHandler(req, res) {
         });
     } catch (error) {
         console.error("Error fetching KPIs:", error);
-        res.status(500).json({ message: "Failed to fetch KPIs data." });
+        return res.status(500).json({ message: "Failed to fetch KPIs data." });
     }
 };
 

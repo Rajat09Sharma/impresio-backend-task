@@ -1,324 +1,171 @@
-📸 Pixisphere Backend
+# 📸 Pixisphere Backend
 
 Pixisphere is a backend API for a photography platform that connects clients with partners (photographers). This server handles authentication, portfolio management, inquiries, reviews, moderation, and more.
 
-✨ Features
+## ✨ Features
 
-✅ User Management
+### ✅ User Management
 
-Signup/Login using email and password
+- Signup/Login using email and password
 
-Roles: client, partner, admin
+- Roles: client, partner, admin
 
-Passwords hashed before storing (using custom hash util)
+- Passwords hashed before storing (using custom hash util)
 
-📷 Partner Features
+### 📷 Partner Features
 
-Partner profile: name, location, price, aadharNumber, categories, tags, styles
+- Partner profile: name, location, price, aadharNumber, categories, tags, styles
 
-Portfolio (array of objects with url and description)
+- Portfolio (array of objects with url and description)
 
-Can edit, add, or delete individual portfolio items
+- Can edit, add, or delete individual portfolio items
 
-View inquiries that match:
+- View inquiries that match:
 
-Same city as partner's location
+   - Same city as partner's location
 
-Budget ≥ partner's price
+   - Budget ≥ partner's price
 
-Category ∈ partner's categories
+   - Category ∈ partner's categories
 
-Update inquiry status: new, responded, booked, closed
+- Update inquiry status: new, responded, booked, closed
 
-Only one partner can close/book an inquiry (closedBy field)
+- Only one partner can close/book an inquiry (closedBy field)
 
-🤝 Client Features
+### 🤝 Client Features
 
-Submit inquiry with fields: city, budget, category, date, imageUrl
+- Submit inquiry with fields: city, budget, category, date, imageUrl
 
-View own submitted inquiries
+- View own submitted inquiries
 
-⭐ Reviews
+### ⭐ Reviews
 
-Create, update, delete reviews
+- Create, update, delete reviews
 
-Linked to both userId and partnerId
+- Linked to both userId and partnerId
 
-Includes rating and optional comment
+- Includes rating and optional comment
 
-Admins can moderate reviews
+- Admins can moderate reviews
 
-📊 Admin Features
+### 📊 Admin Features
 
-View dashboard KPIs:
+- View dashboard KPIs:
 
-Total clients
+    - Total clients
 
-Total partners
+    -  Total partners
 
-Pending verifications
+    -  Pending verifications
 
-Total inquiries
+    - Total inquiries
 
-View/update/delete reviews
+- View/update/delete reviews
 
-Approve/reject partners (status change)
+- Approve/reject partners (status change)
 
-Category CRUD APIs
+- Category CRUD APIs
 
-Location CRUD APIs
+- Location CRUD APIs
 
-📅 Moderation
+### 📅 Moderation
 
-Approve or reject partners by changing status: pending, verified, rejected
+- Approve or reject partners by changing status: pending, verified, rejected
 
-Restrict access to some routes using middleware (adminMiddleware, partnerMiddleware, clientMiddleware)
+- Restrict access to some routes using middleware (adminMiddleware, partnerMiddleware, clientMiddleware)
 
-🌐 API Endpoints Overview
+---
 
-🔐 Auth (/api/auth)
+## 🌐 API Endpoints Overview
 
-Method
+### 🔐 Auth (/api/auth)
 
-Endpoint
+| Method     | Endpoint     | Description   |
+|----------|----------|------------|
+| POST    | /signup| Register a user      |
+| POST     | /login | Login     |
 
-Description
 
-POST
 
-/signup
+### 🧑‍💼 Partners (/api/partner)
 
-Register a user
+| Method     | Endpoint     | Description   |
+|----------|----------|------------|
+|    GET      |    /      |      List all partners       |
+|   POST       |     /     |      Create new partner       |
+|     POST     |     /portfolio/:id     |    Add a portfolio item     |
+|     PUT     |     /portfolio/:id/:index   | Edit a specific portfolio item |
+|  DELETE        |  /portfolio/:id/:index|Delete a specific portfolio item|
+|   GET       |    /leads      |  Get matched inquiries (leads)  |
+|   PUT       |    /leads/:id      | Update inquiry status (booked/closed)   |
 
-POST
 
-/login
 
-Login
+### 📨 Inquiries (/api/inquiry)
 
-🧑‍💼 Partners (/api/partner)
+| Method     | Endpoint     | Description   |
+|----------|----------|------------|
+|      POST    |   /       |    Submit an inquiry (client)       |
 
-Method
 
-Endpoint
+### ⭐ Reviews (/api/review)
 
-Description
+| Method     | Endpoint     | Description   |
+|----------|----------|------------|
+|   POST       |    /      |      Submit a review       |
+|    GET      |     /     |       Get all reviews      |
+|    GET      |   /partner/:id       |  Get reviews for a partner   |
+|    PUT      |   /:id  |Update a review      |
+|    DELETE      |    /:id      | Delete a review|
 
-GET
 
-/
 
-List all partners
+### 👤 Admin Panel (/api/admin)
 
-POST
+| Method     | Endpoint     | Description   |
+|----------|----------|------------|
+|   GET   |  /    |  Get KPIs summary     |
+|  GET    |  /verification    |   View pending partner verifications    |
+|   PUT   |  /verify/:id    |Approve/reject partner       |
+|   GET   |   /reviews   |  View all reviews     |
+|PUT    |  /review/:id    | Update a review      |
+|DELETE      | /review/:id     | Delete a review      |
+| POST     | /category     |Create a category       |
+|   GET   |  /category    | Get all categories      |
+|   PUT   |/category/:id      |Update a category       |
+| DELETE     |/category/:id      |  Delete a category     |
+| POST     |  /location    | Create a location      |
+| GET     |  /location    |Get all locations       |
+| PUT     |/location/:id      | Update a location      |
+| DELETE     |  /location/:id    |Delete a location       |
+      
 
-/
+---
 
-Create new partner
+##⚖️ Role-Based Access
 
-POST
+| Middleware     | Description     |
+|----------|----------|
+|adminMiddleware      | Only allows access to admins     |       
+|partnerMiddleware      | Only allows partners     | 
+|clientMiddleware      |Only allows clients      | 
 
-/portfolio/:id
 
-Add a portfolio item
+---
 
-PUT
 
-/portfolio/:id/:index
 
-Edit a specific portfolio item
+## ⚙️ Setup Instructions
 
-DELETE
+#### ὒ7 Prerequisites
 
-/portfolio/:id/:index
+- Node.js v16+
 
-Delete a specific portfolio item
+- MongoDB (Atlas or local)
 
-GET
+- Postman for testing APIs
 
-/leads
-
-Get matched inquiries (leads)
-
-PUT
-
-/leads/:id
-
-Update inquiry status (booked/closed)
-
-📨 Inquiries (/api/inquiry)
-
-Method
-
-Endpoint
-
-Description
-
-POST
-
-/
-
-Submit an inquiry (client)
-
-⭐ Reviews (/api/review)
-
-Method
-
-Endpoint
-
-Description
-
-POST
-
-/
-
-Submit a review
-
-GET
-
-/
-
-Get all reviews
-
-GET
-
-/partner/:id
-
-Get reviews for a partner
-
-PUT
-
-/:id
-
-Update a review
-
-DELETE
-
-/:id
-
-Delete a review
-
-👤 Admin Panel (/api/admin)
-
-Method
-
-Endpoint
-
-Description
-
-GET
-
-/
-
-Get KPIs summary
-
-GET
-
-/verification
-
-View pending partner verifications
-
-PUT
-
-/verify/:id
-
-Approve/reject partner
-
-GET
-
-/reviews
-
-View all reviews
-
-PUT
-
-/review/:id
-
-Update a review
-
-DELETE
-
-/review/:id
-
-Delete a review
-
-POST
-
-/category
-
-Create a category
-
-GET
-
-/category
-
-Get all categories
-
-PUT
-
-/category/:id
-
-Update a category
-
-DELETE
-
-/category/:id
-
-Delete a category
-
-POST
-
-/location
-
-Create a location
-
-GET
-
-/location
-
-Get all locations
-
-PUT
-
-/location/:id
-
-Update a location
-
-DELETE
-
-/location/:id
-
-Delete a location
-
-⚖️ Role-Based Access
-
-Middleware
-
-Description
-
-adminMiddleware
-
-Only allows access to admins
-
-partnerMiddleware
-
-Only allows partners
-
-clientMiddleware
-
-Only allows clients
-
-⚙️ Setup Instructions
-
-ὒ7 Prerequisites
-
-Node.js v16+
-
-MongoDB (Atlas or local)
-
-Postman for testing APIs
-
-🔄 Installation
+### 🔄 Installation
 
 git clone https://github.com/yourusername/pixisphere-backend.git
 cd pixisphere-backend
@@ -334,33 +181,38 @@ Run the server:
 
 npm start
 
-Server runs at http://localhost:5000
+Server runs at http://localhost:3000
 
-🔍 API Testing
+---
+
+## 🔍 API Testing
 
 Use this Postman collection:
 
-✉️ Click to open Pixisphere Postman Collection : https://cloudy-station-159893.postman.co/workspace/My-Workspace~4c5469b0-a603-4880-8acc-d620e5499494/collection/22654952-7a3f23d0-a519-4fc6-a99a-ceaf7b38d7df?action=share&source=copy-link&creator=22654952
+✉️ [Click to open Pixisphere Postman Collection]( https://cloudy-station-159893.postman.co/workspace/My-Workspace~4c5469b0-a603-4880-8acc-d620e5499494/collection/22654952-7a3f23d0-a519-4fc6-a99a-ceaf7b38d7df?action=share&source=copy-link&creator=22654952)
 
-Includes requests for:
+- Includes requests for:
 
-Auth
+    - Auth
 
-Partner CRUD
+    - Partner CRUD
 
-Inquiries
+    - Inquiries
 
-Reviews
+    - Reviews
 
-Categories & Locations
+    - Categories & Locations
 
-Admin Dashboard APIs
+    - Admin Dashboard APIs
 
-📚 License
+
+--- 
+
+## 📚 License
 
 MIT License
 
-👤 Author
+## 👤 Author
 
-Rajat Sharma
+### Rajat Sharma
 

@@ -142,7 +142,7 @@ Pixisphere is a backend API for a photography platform that connects clients wit
 
 ---
 
-##⚖️ Role-Based Access
+## ⚖️ Role-Based Access
 
 | Middleware     | Description     |
 |----------|----------|

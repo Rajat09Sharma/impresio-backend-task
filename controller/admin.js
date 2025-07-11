@@ -23,8 +23,6 @@ async function getKpisHandler(req, res) {
     }
 };
 
-//
-
 module.exports = {
     getKpisHandler,
 };

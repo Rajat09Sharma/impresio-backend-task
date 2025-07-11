@@ -50,6 +50,9 @@ const partnerSchema = new mongoose.Schema({
         enum: ["pending", "verified", "rejected"],
         default: "pending"
     },
+    comment: {
+        type: String,
+    }
 }, { timestamps: true });
 
 const Partner = mongoose.model("Partner", partnerSchema);

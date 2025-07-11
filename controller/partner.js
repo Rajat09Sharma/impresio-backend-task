@@ -1,6 +1,5 @@
 const { model } = require("mongoose");
 const Partner = require("../model/partner");
-const Inquiry = require("../model/inquiry");
 
 
 // create Partner
@@ -43,6 +42,39 @@ async function getAllPartnerHandler(req, res) {
         res.status(500).json({ message: "Failed to get partners." })
     }
 
+}
+
+// get pending status partners
+async function getPendingStatusPartnersHandler(req, res) {
+
+    try {
+
+        const partners = await Partner.find({ status: "pending" });
+
+        res.status(200).json({ message: " Partners with pending status fetch successfully!", partners });
+
+    } catch (error) {
+        console.log("partners with pending status handler error: ", error);
+        res.status(500).json({ message: "Failed to get pending partners." })
+    }
+}
+
+// update status with comment
+async function updatePartnerStatusHandler(req, res) {
+    const partnerId = req.params;
+    const { status, comment } = req.body;
+    try {
+        if (!status || !comment) {
+            res.status(400).json({ message: "All fields required!" });
+        }
+
+        const partner = await Partner.findByIdAndUpdate({ _id: id }, { status, comment });
+        res.status(200).json({ message: "Partner status updated successfully" });
+
+    } catch (error) {
+        console.log("update partner status handler error: ", error);
+        res.status(500).json({ message: "Failed to update partner status." })
+    }
 }
 
 
@@ -150,9 +182,9 @@ async function deletePortfolioHandler(req, res) {
 module.exports = {
     createPartnerHandler,
     getAllPartnerHandler,
+    getPendingStatusPartnersHandler,
+    updatePartnerStatusHandler,
     addPortfolioHandler,
     editPortfolioHandler,
     deletePortfolioHandler,
-    getLeadsHandler,
-    updateInquiryStatusHandler
 }
